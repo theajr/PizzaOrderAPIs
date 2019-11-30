@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Order;
-use App\User;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -13,9 +11,9 @@ class OrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return User::all();
+        return $request->user()->orders()->get();
     }
 
     /**
@@ -25,7 +23,29 @@ class OrderController extends Controller
      */
     public function create(Request $request)
     {
-        print_r("Hii");
+        $order = new Order([
+            'address_id' => $request->address_id
+        ]);
+        $amount = 0;
+        $orderItems = [];
+        foreach ($request->cart as $pizzaId => $qty) {
+            $item = Pizza::find($pizzaId);
+            $amount = $amount + ($item->price * $qty);
+            $order->amount = $amount;
+            $orderItem = new OrderItem([
+                'pizza_id' => $item->id,
+                'amount' => $item->price,
+                'quantity' => $qty
+            ]);
+            array_push($orderItems, $orderItem);
+        }
+        $newOrder = $request->user()->orders()->save($order);
+        $newOrder->items()->saveMany($orderItems);
+        return response()->json([
+            'message' => 'Successfully Placed Order!',
+            'orders' => $request->user()->orders()->get(),
+            'new' => $newOrder
+        ], 200);
     }
 
     /**
@@ -45,9 +65,10 @@ class OrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $req, $id)
     {
-        //
+        $order =  Order::with('items')->where('id',$id)->first();
+        return $order;
     }
 
     /**

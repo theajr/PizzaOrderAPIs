@@ -17,7 +17,9 @@ class CreatePizzasTable extends Migration
             $table->bigIncrements('id');
             $table->string('title');
             $table->text('description');
+            $table->float('price', 5, 2);
             $table->string('imageUrl');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -28,7 +30,8 @@ class CreatePizzasTable extends Migration
      * @return void
      */
     public function down()
-    {
+    {Schema::disableForeignKeyConstraints();
+
         Schema::dropIfExists('pizzas');
     }
 }

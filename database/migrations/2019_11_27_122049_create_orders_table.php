@@ -23,7 +23,7 @@ class CreateOrdersTable extends Migration
             $table->foreign('address_id')->references('id')->on('addresses');
 
             $table->float('amount',5,2);
-
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -35,6 +35,8 @@ class CreateOrdersTable extends Migration
      */
     public function down()
     {
+        Schema::disableForeignKeyConstraints();
+
         Schema::dropIfExists('orders');
     }
 }

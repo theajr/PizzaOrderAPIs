@@ -20,11 +20,11 @@ class CreateOrderItemsTable extends Migration
 
             $table->foreign('order_id')->references('id')->on('orders');
             $table->foreign('pizza_id')->references('id')->on('pizzas');
-            
-            $table->float('price', 5, 2);	
+
+            $table->float('amount', 5, 2);
             $table->integer('quantity');
             // $table->index(['pizza_id','order_id']);
-
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -36,6 +36,8 @@ class CreateOrderItemsTable extends Migration
      */
     public function down()
     {
+        Schema::disableForeignKeyConstraints();
+
         Schema::dropIfExists('order_items');
     }
 }

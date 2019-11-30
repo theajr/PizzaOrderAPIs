@@ -13,11 +13,21 @@ return [
     */
 
 
-
     'supportsCredentials' => false,
     'allowedOrigins' => ['*'],
-    'allowedHeaders' => ['Content-Type', 'X-Requested-With'],
-    'allowedMethods' => ['*'], // ex: ['GET', 'POST', 'PUT',  'DELETE']
+    'allowedHeaders' => [
+        'Content-Type',
+        'X-Auth-Token',
+        'Origin',
+        'Authorization',],
+    'allowedMethods' => [
+        'POST',
+        'GET',
+        'OPTIONS',
+        'PUT',
+        'PATCH',
+        'DELETE',
+    ],
     'exposedHeaders' => [],
     'maxAge' => 0,
 

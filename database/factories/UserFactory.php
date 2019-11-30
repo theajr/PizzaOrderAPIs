@@ -61,6 +61,7 @@ $factory->define(\App\Pizza::class, function (Faker $faker) {
     return [
         'title' => "Piz-" . $faker->jobTitle,
         'description' => $faker->realText(),
+        'price'=>$faker->randomFloat(2, 3, 10),
         'imageUrl' => 'http://lorempixel.com/g/100/100/food',
     ];
 });

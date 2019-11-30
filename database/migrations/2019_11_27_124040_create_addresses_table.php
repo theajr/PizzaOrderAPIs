@@ -20,10 +20,11 @@ class CreateAddressesTable extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->string('street_address');
             $table->string('city');
-            $table->string('landmark');
+            $table->string('landmark')->nullable();
             $table->string('state');
             $table->string('country');
             $table->string('pincode');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -34,7 +35,8 @@ class CreateAddressesTable extends Migration
      * @return void
      */
     public function down()
-    {
+    {Schema::disableForeignKeyConstraints();
+
         Schema::dropIfExists('addresses');
     }
 }

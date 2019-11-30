@@ -24,6 +24,11 @@ Route::group([
     ], function() {
         Route::get('logout', 'AuthController@logout');
         Route::get('user', 'AuthController@user');
+        Route::resource('orders', 'OrderController');
+        Route::resource('pizzas', 'PizzaController');
+        Route::resource('addresses', 'AddressController');
     });
+
+
 });
-Route::get("pizzas", "PizzaController@getPizzas");
+
