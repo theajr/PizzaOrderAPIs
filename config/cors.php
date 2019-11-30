@@ -29,6 +29,6 @@ return [
         'DELETE',
     ],
     'exposedHeaders' => [],
-    'maxAge' => 0,
+    'maxAge' => 60*60,
 
 ];

@@ -27,6 +27,18 @@ class AddressController extends Controller
     {
 
 
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+
+
         $request->validate([
             'street_address' => 'required|string',
             'city' => 'required|string',
@@ -51,17 +63,6 @@ class AddressController extends Controller
             'message' => 'Successfully Added address!',
             'addresses' => $request->user()->addresses()->get()
         ], 201);
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
     }
 
     /**

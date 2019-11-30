@@ -2,7 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Address;
+use App\Order;
+use App\OrderItem;
+use App\Pizza;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+
 
 class OrderController extends Controller
 {
@@ -13,7 +19,15 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-        return $request->user()->orders()->get();
+        $orders = $request->user()->orders;
+        foreach($orders as $order){
+            $order->items = $order->items;
+            foreach ($order->items as $item){
+                $item->pizza = Pizza::find($item->pizza_id);
+            }
+            $order->address = Address::find($order->address_id);
+        }
+        return $orders;
     }
 
     /**
@@ -22,6 +36,17 @@ class OrderController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create(Request $request)
+    {
+
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
     {
         $order = new Order([
             'address_id' => $request->address_id
@@ -46,17 +71,6 @@ class OrderController extends Controller
             'orders' => $request->user()->orders()->get(),
             'new' => $newOrder
         ], 200);
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
     }
 
     /**
