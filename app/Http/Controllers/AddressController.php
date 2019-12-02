@@ -57,12 +57,9 @@ class AddressController extends Controller
             'pincode' => $request->pincode,
 
         ]);
-        $request->user()->addresses()->save($address);
+        $newAddress=$request->user()->addresses()->save($address);
 
-        return response()->json([
-            'message' => 'Successfully Added address!',
-            'addresses' => $request->user()->addresses()->get()
-        ], 201);
+        return response()->json($newAddress, 201);
     }
 
     /**
@@ -107,6 +104,11 @@ class AddressController extends Controller
      */
     public function destroy($id)
     {
-
+        $address = Address::find($id);
+        $address->delete();
+        return response()->json([
+            "message"=>"Successfull deleted address",
+            "address"=>$address
+        ]);
     }
 }

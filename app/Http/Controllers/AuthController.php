@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -29,7 +30,7 @@ class AuthController extends Controller
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'email' => $request->email,
-            'avatar'=>$request->avatar,
+            'avatar' => $request->avatar,
             'password' => bcrypt($request->password)
         ]);
         $user->save();
@@ -57,7 +58,7 @@ class AuthController extends Controller
             'remember_me' => 'boolean'
         ]);
         $credentials = request(['email', 'password']);
-        if(!Auth::attempt($credentials))
+        if (!Auth::attempt($credentials))
             return response()->json([
                 'message' => 'Invalid Credentials'
             ], 401);
@@ -68,9 +69,10 @@ class AuthController extends Controller
             $token->expires_at = Carbon::now()->addWeeks(1);
         $token->save();
         return response()->json([
-            'profile'=> $user,
+            'profile' => $user,
             'access_token' => $tokenResult->accessToken,
             'token_type' => 'Bearer',
+            'totalOrders' => $user->orders->count(),
             'expires_at' => Carbon::parse(
                 $tokenResult->token->expires_at
             )->toDateTimeString()
@@ -97,7 +99,10 @@ class AuthController extends Controller
      */
     public function user(Request $request)
     {
-        return response()->json($request->user());
+        $user = $request->user();
+        $user->totalOrders = $user->orders->count();
+        return response()->json($user);
     }
 }
+
 ?>

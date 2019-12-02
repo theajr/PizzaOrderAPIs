@@ -21,11 +21,11 @@ class OrderController extends Controller
     {
         $orders = $request->user()->orders;
         foreach($orders as $order){
-            $order->items = $order->items;
+
             foreach ($order->items as $item){
                 $item->pizza = Pizza::find($item->pizza_id);
             }
-            $order->address = Address::find($order->address_id);
+            $order->address = Address::withTrashed()->find($order->address_id);
         }
         return $orders;
     }
